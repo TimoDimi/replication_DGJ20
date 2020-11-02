@@ -20,201 +20,7 @@ library(tidyr)
 library(reliabilitydiag)
 library(RColorBrewer)
 library(ggplot2)
-```
-
-```{r}
-rel.diag.classic <- function(
-  rlz,
-  FC,
-  bins=FALSE,
-  plot.theme=theme_gray(),
-  plot.col="red",
-  plot.hist=TRUE,
-  plot.lwd=1,
-  plot.lty=1,
-  plot.pts.size=3,
-  point.x="avg",
-  bars=FALSE
-) {
-  df <- data.frame(FC,rlz)
-
-  # The case without bins
-  if (class(bins)=="logical" && bins==FALSE){
-    df <- df %>% mutate(bin.index = dense_rank(FC))
-    df$bin.midpoint <- df$FC
-    df.bins <- df %>%
-      group_by(bin.index) %>%
-      summarise(
-        bin.freq=mean(rlz),
-        bin.n=length(rlz),
-        bin.midpoint=unique(bin.midpoint))
-
-    # Plot the reliability diagram with histogram embedded
-    if (length(unique(df$FC)) <= 5){
-      # Use 40 equally spaced bins as histogram breaks if <= 5 unique FCs and
-      # reldiags without binning
-      p.reldiag <- ggplot(
-        data=df.bins,
-        mapping=aes(x=bin.midpoint, y=bin.freq)
-      ) +
-        geom_histogram(
-          data=df,
-          mapping=aes(x=FC, y = ..ncount../5),
-          inherit.aes=FALSE,
-          color="black",
-          fill="white",
-          breaks=seq(0,1,length.out=41)) +
-        ylab("") +
-        xlab("") +
-        xlim(0,1) +
-        ylim(0,1)
-    } else {
-      # Use the unique FC values as histogram breaks if > 5 unique FCs and
-      # reldiags without binning
-      p.reldiag <- ggplot(
-        data=df.bins,
-        mapping=aes(x=bin.midpoint, y=bin.freq)
-      ) +
-        geom_histogram(
-          data=df,
-          mapping=aes(x=FC, y = ..ncount../5),
-          inherit.aes=FALSE,
-          color="black",
-          fill="white",
-          breaks=unique(df$FC)) +
-        ylab("") +
-        xlab("") +
-        xlim(0,1) +
-        ylim(0,1)
-    }
-
-    p.reldiag <- p.reldiag +
-      geom_segment(
-        aes(x = 0, y = 0, xend = 1, yend = 1),
-        size=plot.lwd/3,
-        colour="black") +
-      theme(legend.position = "none") +
-      geom_point(size=plot.pts.size, colour=plot.col) +
-      geom_line(size=plot.lwd, colour=plot.col) +
-      plot.theme
-
-  } else {
-    # The case with bins
-    if (class(bins)=="logical" && bins==TRUE){
-      bins <- seq(0,1,length.out=11)
-      bin.midpoint <- bins[-length(bins)] + diff(bins)/2
-    } else if (class(bins)=="numeric" && length(bins)==1){
-      bins <- seq(0,1,length.out=bins + 1)
-      bin.midpoint <- bins[-length(bins)] + diff(bins)/2
-    } else if (class(bins)=="numeric" && length(bins)>=1){
-      bin.midpoint <- bins[-length(bins)] + diff(bins)/2
-    } else if (class(bins)=="character" && bins=="quantiles"){
-      # split the space [0,1] into up to 10 (unique!!!) bins determined by the
-      # quantiles of df$FC
-      bins <- unique(
-        c(0,as.numeric(quantile(df$FC,seq(0.1,0.9,length.out=9))),1)
-      )
-      bin.midpoint <- bins[-length(bins)] + diff(bins)/2
-    }
-
-    df <- data.frame(FC,rlz)
-    df$bin.index <- cut(df$FC, breaks=bins, include.lowest=TRUE, labels = FALSE)
-    df$bin.midpoint <- bin.midpoint[df$bin.index]
-
-    df.bins <- df %>%
-      group_by(bin.index) %>%
-      summarise(
-        bin.freq=mean(rlz),
-        bin.n=length(rlz),
-        bin.n.small=(length(rlz)<=5),
-        bin.midpoint=unique(bin.midpoint),
-        bin.avg.x = mean(FC))
-
-    # plot either bin averages or bin midpoints on the x-axsis
-    if (point.x=="avg"){
-      p.reldiag <- ggplot() +
-        geom_histogram(
-          data=df,
-          mapping=aes(x=FC, y = ..ndensity../5),
-          inherit.aes=FALSE,
-          color="black",
-          fill="white",
-          breaks=bins) +
-        ylab("") +
-        xlab("") +
-        xlim(0,1) +
-        ylim(0,1)
-    } else{
-      p.reldiag <- ggplot() +
-        geom_histogram(
-          data=df,
-          mapping=aes(x=FC, y = ..ndensity../5),
-          inherit.aes=FALSE,
-          color="black",
-          fill="white",
-          breaks=bins) +
-        ylab("") +
-        xlab("") +
-        xlim(0,1) +
-        ylim(0,1)
-    }
-
-
-    if (bars==TRUE){
-      # Ribbon first
-      df.ribbon <- merge(
-        df,
-        df.bins %>% dplyr::select("bin.index","bin.freq"),
-        by="bin.index")
-      p.reldiag <- p.reldiag +
-        geom_ribbon(
-          data=df.ribbon,
-          aes(x=FC, ymin=FC, ymax=bin.freq),
-          fill = "grey70")
-
-      # Plot Bars instead of connecting lines between the points
-      df.bins$bin.lower <- bins[-length(bins)]
-      df.bins$bin.upper <- bins[-1]
-      df.endpoints <- data.frame(
-        x=c(bins[-length(bins)],bins[-1]) ,
-        y=rep(df.bins$bin.freq,2),
-        bin.index=rep(df.bins$bin.index,2))
-      p.reldiag <- p.reldiag +
-        geom_line(
-          data=df.endpoints,
-          aes(x=x, y=y, group=bin.index),
-          size=1,
-          colour=plot.col)
-    } else {
-      p.reldiag <- p.reldiag +
-        geom_line(
-          data=df.bins,
-          mapping=aes(x=bin.avg.x, y=bin.freq),
-          size=plot.lwd,
-          colour=plot.col) +
-        theme(legend.position = "none") +
-        plot.theme
-
-    }
-
-    p.reldiag <- p.reldiag +
-      geom_segment(
-        aes(x = 0, y = 0, xend = 1, yend = 1),
-        size=plot.lwd/3,
-        colour="black") +
-      theme(legend.position = "none") +
-      geom_point(
-        data=df.bins,
-        mapping=aes(x=bin.avg.x, y=bin.freq),
-        size=plot.pts.size,
-        colour=plot.col,
-        show.legend = F) +
-      scale_shape_manual(values=c(19))
-  }
-
-  return(list(df=df, df.bins=df.bins, p=p.reldiag))
-}
-
+source("./../replication_supplement/rel_diag_classic.R")
 ```
 
 
@@ -226,28 +32,29 @@ precip <- precip_Niamey_2016
 
 # Plot for Figure 1
 
-```{r}
+```{r, warning=FALSE, fig.show='hide'}
 Fig1 <- tibble(
   enum = letters[1:6],
   forecast = c("ENS", "EPC", "Logistic") %>% rep(each = 2),
   reldiag_type = c("BaC", "CORP") %>% rep(3)
 ) %>%
-  mutate(., 
-    plot = purrr::pmap(., function(enum, forecast, reldiag_type) {
-      if (reldiag_type == "BaC") {
-        rel.diag.classic(rlz=precip$obs, FC=precip[[forecast]], bins=10)$p +
-          ggtitle(sprintf("(%s) %s / Binning and Counting", enum, forecast)) +
-          xlab("Forecast value") +
-          ylab("CEP") +
-          theme_bw()
-      } else if (reldiag_type == "CORP") {
-        set.seed(42)
-        r <- reliabilitydiag(precip[[forecast]], y = precip$obs, n.boot = 100)
-        autoplot(r) +
-          ggtitle(sprintf("(%s) %s / CORP", enum, forecast)) +
-          annotate("text", x = .125, y = .94,
-                   label = sprintf("MCB = %.3f", summary(r)$miscalibration))
-      }})
+  mutate(.,
+         plot = purrr::pmap(., function(enum, forecast, reldiag_type) {
+           if (reldiag_type == "BaC") {
+             rel.diag.classic(rlz=precip$obs, FC=precip[[forecast]], bins=10)$p +
+               ggtitle(sprintf("(%s) %s / Binning and Counting", enum, forecast)) +
+               xlab("Forecast value") +
+               ylab("CEP") +
+               theme_bw()
+           } else if (reldiag_type == "CORP") {
+             set.seed(42)
+             r <- reliabilitydiag(precip[[forecast]], y = precip$obs, n.boot = 100)
+             autoplot(r) +
+               ggtitle(sprintf("(%s) %s / CORP", enum, forecast)) +
+               annotate("text", x = .125, y = .94, label = sprintf("MCB = %.3f", summary(r)$miscalibration)) +
+               annotate("text", x = .125, y = .88, label = sprintf("DSC = %.3f", summary(r)$discrimination)) +
+               annotate("text", x = .125, y = .82, label = sprintf("UNC = %.3f", summary(r)$uncertainty))
+           }})
   )
 
 ```
@@ -255,7 +62,7 @@ Fig1 <- tibble(
 ```{r, eval = FALSE}
 purrr::pmap(Fig1, function(enum, forecast, reldiag_type, plot) {
   ggsave(
-    sprintf("applications/plots/Fig1%s_%s_%s.pdf", enum, forecast, reldiag_type),
+    sprintf("./../replication_paper/plots/Fig1%s_%s_%s.pdf", enum, forecast, reldiag_type),
     plot,
     width=5, height=5, units="in"
   )
@@ -265,99 +72,100 @@ purrr::pmap(Fig1, function(enum, forecast, reldiag_type, plot) {
 
 ```{r, fig.height = 5, fig.width = 5}
 Fig1$plot
-
 ```
+    
+    
     
 # Plot for Figure 2
 
-```{r}
+```{r, warning=FALSE, fig.show='hide'}
 Fig2 <- tibble(
   enum = letters[1:4],
   bins = c(9, 10, 11, NA),
   reldiag_type = c("BaC", "CORP") %>% rep.int(c(3, 1))
 ) %>%
-  mutate(., 
-    plot = purrr::pmap(., function(enum, bins, reldiag_type) {
-      if (reldiag_type == "BaC") {
-        rel.diag.classic(rlz=precip$obs, FC=precip[["EMOS"]], bins=bins)$p +
-          ggtitle(sprintf("(%s) EMOS / %i Equidistant Bins", enum, bins)) +
-          xlab("Forecast value") +
-          ylab("CEP") +
-          theme_bw()
-      } else if (reldiag_type == "CORP") {
-        set.seed(42)
-        r <- reliabilitydiag(precip[["EMOS"]], y = precip$obs, n.boot = 100)
-        autoplot(r) +
-          ggtitle(sprintf("(%s) EMOS / CORP", enum)) +
-          annotate("text", x = .125, y = .94,
-                   label = sprintf("MCB = %.3f", summary(r)$miscalibration))
-      }})
+  mutate(.,
+         plot = purrr::pmap(., function(enum, bins, reldiag_type) {
+           if (reldiag_type == "BaC") {
+             rel.diag.classic(rlz=precip$obs, FC=precip[["EMOS"]], bins=bins)$p +
+               ggtitle(sprintf("(%s) EMOS / %i Equidistant Bins", enum, bins)) +
+               xlab("Forecast value") +
+               ylab("CEP") +
+               theme_bw()
+           } else if (reldiag_type == "CORP") {
+             set.seed(42)
+             r <- reliabilitydiag(precip[["EMOS"]], y = precip$obs, n.boot = 100)
+             autoplot(r) +
+               ggtitle(sprintf("(%s) EMOS / CORP", enum)) +
+               annotate("text", x = .125, y = .94, label = sprintf("MCB = %.3f", summary(r)$miscalibration)) +
+               annotate("text", x = .125, y = .88, label = sprintf("DSC = %.3f", summary(r)$discrimination)) +
+               annotate("text", x = .125, y = .82, label = sprintf("UNC = %.3f", summary(r)$uncertainty))
+           }})
   )
-
 ```
 
 ```{r, eval = FALSE}
 purrr::pmap(Fig2, function(enum, bins, reldiag_type, plot) {
   ggsave(
-    sprintf("applications/plots/Fig2%s_%s_%s.pdf", enum, bins, reldiag_type),
+    sprintf("./../replication_paper/plots/Fig2%s_%s_%s.pdf", enum, bins, reldiag_type),
     plot,
     width=5, height=5, units="in"
   )
 })
-
 ```
 
 ```{r, fig.height = 5, fig.width = 5}
 Fig2$plot
-
 ```
+
+
 
 
 # Plots for Figure 3
 
-```{r}
+```{r, warning=FALSE, fig.show='hide'}
 Fig3 <- tibble(
   enum = letters[1:4],
   xtype = c("discrete", "continuous") %>% rep(each = 2),
   region.position = c("diagonal", "estimate") %>% rep(2)
 ) %>%
   mutate(.,
-    plot = purrr::pmap(., function(enum, xtype, region.position) {
-      set.seed(42)
-      n <- 1024
-      if (xtype == "discrete") {
-        k <- 10
-        x <- sample((1:k - 0.5) / k, n, replace=TRUE)
-      } else if (xtype == "continuous") {
-        x <- runif(n)
-      }
-      y <- rbinom(n, 1, x^0.5)
-      r <- reliabilitydiag(x, y = y, region.position = region.position)
-      autoplot(r) +
-        ggtitle(sprintf("(%s)", enum)) +
-        annotate("text", x = .125, y = .94,
-                 label = sprintf("MCB = %.3f", summary(r)$miscalibration))
-    })
-    
-  )
+         plot = purrr::pmap(., function(enum, xtype, region.position) {
+           set.seed(42)
+           n <- 1024
+           if (xtype == "discrete") {
+             k <- 10
+             x <- sample((1:k - 0.5) / k, n, replace=TRUE)
+           } else if (xtype == "continuous") {
+             x <- runif(n)
+           }
+           y <- rbinom(n, 1, x^0.5)
+           r <- reliabilitydiag(x, y = y, region.position = region.position)
+           autoplot(r) +
+             ggtitle(sprintf("(%s)", enum)) +
+             annotate("text", x = .125, y = .94, label = sprintf("MCB = %.3f", summary(r)$miscalibration)) +
+             annotate("text", x = .125, y = .88, label = sprintf("DSC = %.3f", summary(r)$discrimination)) +
+             annotate("text", x = .125, y = .82, label = sprintf("UNC = %.3f", summary(r)$uncertainty))
+         })
 
+  )
 ```
 
 ```{r, eval = FALSE}
 purrr::pmap(Fig3, function(enum, xtype, region.position, plot) {
   ggsave(
-    sprintf("simulations/plots/Fig3%s_%s_%s.pdf", enum, xtype, region.position),
+    sprintf("./../replication_paper/plots/Fig3%s_%s_%s.pdf", enum, xtype, region.position),
     plot,
     width=5, height=5, units="in"
   )
 })
-
 ```
 
 ```{r, fig.height = 5, fig.width = 5}
 Fig3$plot
-
 ```
+
+
 
 # Coverage simulation
 
@@ -379,7 +187,7 @@ bounds.plot.set <- c("diagonal","estimate")
 ratio.beta.unif <- 4
 beta.param.2 <- 10
 
-core.max <- 35
+core.max <- 70
 cl <- makeCluster(min(parallel::detectCores()-1, M.MC, core.max) )
 registerDoParallel(cl)
 
@@ -429,7 +237,7 @@ df.MC <- foreach(
 
             rel <- tryCatch(
               reliabilitydiag(
-                p, y=y,
+                X=p, y=y,
                 region.level = 0.9, region.position = bounds.plot, n.boot=100),
               error=function(e) NULL
             )
@@ -511,14 +319,14 @@ end.time <- Sys.time()
 (run.time <- end.time-start.time)
 head(df.MC)
 
-saveRDS(df.MC, file = "./data/sim_Bounds_Coverage_20200722.rds")
-
+saveRDS(df.MC, file = "./../replication_paper/data/sim_Bounds_Coverage_MainArticle_20201015.rds")
 ```
 
 # Figure 4: Coverage
 
 ```{r}
-df.MC <- readRDS(file = "./data/sim_Bounds_Coverage_20200722.rds")
+# Figure 4: Coverage
+df.MC <- readRDS(file = "./../replication_paper/data/sim_Bounds_Coverage_MainArticle_20201015.rds")
 
 plot.df <- df.MC %>%
   dplyr::filter(alpha==1 & !(x.region %in% c(0,1)))  %>%
@@ -559,20 +367,17 @@ p.individual <- ggplot(plot.df, aes(x=n, y=Value)) +
   ylim(0.8,1) +
   ylab("Empirical Coverage") +
   xlab("Sample Size")
-
 ```
 
 ```{r eval = FALSE}
 ggsave(
-  paste0("./plots/sim_CoverageDefault_20200722.pdf"),
+  paste0("./../replication_paper/plots/Fig4_Coverage.pdf"),
   p.individual,
   height=8, width=14,units="in")
-
 ```
 
 ```{r fig.height = 8, fig.width = 14}
 p.individual
-
 ```
 
 # Simulations Efficiency
@@ -585,6 +390,8 @@ library(ggplot2)
 library(reliabilitydiag)
 library(RColorBrewer)
 
+source("./../replication_supplement/rel_diag_classic.R")
+
 M <- 1000
 n.set <- 2^seq(6,13)
 k.set <- c(10, 50, Inf)
@@ -596,7 +403,7 @@ beta.param.2 <- 10
 
 bins.list <- list(5,10,50,"Q-n(1/6)","Q-n(2/6)","Q-n(3/6)")
 
-core.max <- 35
+core.max <- 70
 cl <- makeCluster(min(parallel::detectCores()-1, M, core.max) )
 registerDoParallel(cl)
 start.time <- Sys.time()
@@ -643,7 +450,7 @@ res.df.MC <- foreach(
           y <- rbinom(n, 1, p)
 
           # PAV Reliability Diagram
-          rel <- reliabilitydiag(p, y=y, region.level = NA)
+          rel <- reliabilitydiag(X=p, y=y, region.level = NA)
           CEP.df <- with(rel$X, merge(cases, bins, by.x="bin_id"))
           CEP.df <- CEP.df %>% mutate(CEPtrue = x^alpha)
           MSE <- with(CEP.df, mean((CEP_pav-CEPtrue)^2))
@@ -758,14 +565,16 @@ stopCluster(cl)
 end.time <- Sys.time()
 (run.time <- end.time-start.time)
 
-saveRDS(res.df.MC, file = "./data/sim_RelMeasures_Convergence_20200726.rds")
+saveRDS(res.df.MC, file = "./../replication_paper/data/sim_Rel_Efficiency_MainArticle_20201015.rds")
 
 ```
 
 # Figure 5: Efficiency
 
 ```{r}
-res.df.MC <- readRDS(file = "./data/sim_RelMeasures_Convergence_20200726.rds")
+
+# Figure 5: Efficiency
+res.df.MC <- readRDS(file = "./../replication_paper/data/sim_Rel_Efficiency_MainArticle_20201015.rds")
 
 res.df <- res.df.MC %>%
   group_by(Measure, RelDiag.Type, n, m.bins, alpha, dist.x, k) %>%
@@ -833,16 +642,13 @@ p.eff <- ggplot(df.plot, aes(x=n, y=Value)) +
   theme(legend.position="bottom") +
   ylab("MSE") +
   xlab("Sample Size n")
-
 ```
 
 ```{r eval = FALSE}
-ggsave("./plots/Efficiency_Wide.pdf", p.eff, height=8, width=14, units="in")
-
+ggsave("./../replication_paper/plots/Fig5_Efficiency.pdf", p.eff, height=8, width=14, units="in")
 ```
 
 ```{r fig.height = 8, fig.width = 14}
 p.eff
-
 ```
 
