@@ -10,9 +10,13 @@ library(RColorBrewer)
 library(reshape2)
 library(reliabilitydiag)
 
-source("replication_supplement/rel_diag_classic.R")
+source(here("replication_supplement/rel_diag_classic.R"))
 
-dist.par.tbl <- readRDS("./replication_supplement/data/DGPs_DataDriven.rds")
+dist.par.tbl <- readRDS(here("replication_supplement/data/DGPs_DataDriven.rds"))
+
+
+runSimulations <- FALSE
+if (isTRUE(runSimulations)) {
 
 M <- 1000
 n.set <- 2^seq(6,13)
@@ -121,14 +125,15 @@ stopCluster(cl)
 end.time <- Sys.time()
 (run.time <- end.time-start.time)
 
-saveRDS(res.df.MC, file = "./replication_supplement/data/sim_Rel_Efficiency_20201015.rds")
+saveRDS(res.df.MC, file = here("replication_supplement/data/sim_Rel_Efficiency_20201015.rds"))
 
+}
 
 
 #######################################################################################################################
 ###  Efficiency plot for the paper
 
-res.df.MC <- readRDS(file = "./replication_supplement/data/sim_Rel_Efficiency_20201015.rds")
+res.df.MC <- readRDS(file = here("replication_supplement/data/sim_Rel_Efficiency_20201015.rds"))
 res.df <- res.df.MC %>% group_by(Measure, RelDiag.Type, n, m.bins, CEP.true, dist.x, k) %>% summarize(Value = mean(Value), count=n())
 
 df.plot <- res.df %>%
@@ -179,8 +184,8 @@ p.eff <- ggplot(plot.df.precip, aes(x=n, y=Value)) +
   theme(legend.position="bottom") +
   ylab("MSE") +
   xlab("Sample Size n")
-p.eff
-ggsave("./replication_supplement/plots/Efficiency_PrecipData.pdf", p.eff, height=15, width=12, units="in")
+print(p.eff)
+ggsave(here("replication_supplement/plots/Efficiency_PrecipData.pdf"), p.eff, height=15, width=12, units="in")
 
 
 
@@ -205,8 +210,8 @@ p.eff <- ggplot(plot.df.flares, aes(x=n, y=Value)) +
   theme(legend.position="bottom") +
   ylab("MSE") +
   xlab("Sample Size n")
-p.eff
-ggsave("./replication_supplement/plots/Efficiency_SolarFlaresData.pdf", p.eff, height=15, width=12, units="in")
+print(p.eff)
+ggsave(here("replication_supplement/plots/Efficiency_SolarFlaresData.pdf"), p.eff, height=15, width=12, units="in")
 
 
 
@@ -231,8 +236,8 @@ p.eff <- ggplot(plot.df.recid, aes(x=n, y=Value)) +
   theme(legend.position="bottom") +
   ylab("MSE") +
   xlab("Sample Size n")
-p.eff
-ggsave("./replication_supplement/plots/Efficiency_RecidivismData.pdf", p.eff, height=15, width=12, units="in")
+print(p.eff)
+ggsave(here("replication_supplement/plots/Efficiency_RecidivismData.pdf"), p.eff, height=15, width=12, units="in")
 
 
 
@@ -257,7 +262,7 @@ p.eff <- ggplot(plot.df.SPF, aes(x=n, y=Value)) +
   theme(legend.position="bottom") +
   ylab("MSE") +
   xlab("Sample Size n")
-p.eff
-ggsave("./replication_supplement/plots/Efficiency_SPFData.pdf", p.eff, height=15, width=15, units="in")
+print(p.eff)
+ggsave(here("replication_supplement/plots/Efficiency_SPFData.pdf"), p.eff, height=15, width=15, units="in")
 
 

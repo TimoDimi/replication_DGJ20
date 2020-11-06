@@ -2,9 +2,9 @@
 library(gridExtra)
 library(reliabilitydiag)
 
-source("replication_supplement/rel_diag_classic.R")
-source("replication_supplement/rel_diag_quantile.R")
-FC.tbl <- readRDS(file = "./replication_supplement/data/DGPs_FCtbl.rds")
+source(here("replication_supplement/rel_diag_classic.R"))
+source(here("replication_supplement/rel_diag_quantile.R"))
+FC.tbl <- readRDS(file = here("replication_supplement/data/DGPs_FCtbl.rds"))
 
 
 # Layout Matrix
@@ -18,12 +18,14 @@ layout_matrix <- rbind(rep(seq(1,4), each=2),
   c(NA,NA,NA,13,13,NA,NA,NA))
 
 #### Loop over all forecasts
-for (FC.type.choice in unique(FC.tbl$FC.type)){
+#for (FC.type.choice in unique(FC.tbl$FC.type)){
+for (FC.type.choice in c("precip.ENS", "M1.DAFFS", "Recid.COMPAS", "SPF.84.4Quarter")) {
   m.bins.set <- 9:11
   x <- FC.tbl%>%filter(FC.type == FC.type.choice)%>%pull(x)
   y <- FC.tbl%>%filter(FC.type == FC.type.choice)%>%pull(y)
 
   rel.list <- list()
+  pdf(file = NULL)
   for (m.bins in m.bins.set){
     # Equidistant Binning
     rel <- rel.diag.classic(y, x, bins=seq(0,1,length.out=m.bins+1))
@@ -67,17 +69,18 @@ for (FC.type.choice in unique(FC.tbl$FC.type)){
                               ggtitle(paste0("Q- Binning with ", m.bins, " Bins")))
   }
 
-
   rel <- reliabilitydiag::reliabilitydiag(x, y=y)
   rel.list <- list.append(rel.list, plot(rel) + ggtitle(paste0("CORP Method")) +
                             annotate("text", x = 0.125, y = 0.94, label = paste("MCB = ", formatC(as.numeric(summary(rel)[3]), digits=3, format="f"))) +
                             annotate("text", x = 0.125, y = 0.88, label = paste("DSC = ", formatC(as.numeric(summary(rel)[4]), digits=3, format="f"))) +
                             annotate("text", x = 0.125, y = 0.82, label = paste("UNC = ", formatC(as.numeric(summary(rel)[5]), digits=3, format="f"))))
 
+  dev.off()
+
   formatC(df.scores$REL, digits=4, format="f")
 
   p <- grid.arrange(grobs=rel.list,layout_matrix=layout_matrix)
-  ggsave(paste0("./replication_supplement/plots/Instability_Q_", FC.type.choice,".pdf"), p, height=16, width=16, units="in")
+  ggsave(here(paste0("replication_supplement/plots/Instability_Q_", FC.type.choice,".pdf")), p, height=16, width=16, units="in")
 }
 
 

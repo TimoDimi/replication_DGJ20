@@ -3,8 +3,13 @@ library(dplyr)
 library(tibble)
 library(ggplot2)
 library(reliabilitydiag)
+library(here)
 
-dist.par.tbl <- readRDS("./replication_supplement/data/DGPs_DataDriven.rds")
+dist.par.tbl <- readRDS(here("replication_supplement/data/DGPs_DataDriven.rds"))
+
+
+runSimulations <- FALSE
+if (isTRUE(runSimulations)) {
 
 M.MC <- 1000
 n.set <- 2^seq(6,13)
@@ -90,22 +95,25 @@ head(df.MC)
 df.MC1 <- df.MC %>% dplyr::filter(i_MC <= 500)
 df.MC2 <- df.MC %>% dplyr::filter(i_MC > 500)
 
-saveRDS(df.MC1, file = "./replication_supplement/data/sim_Bounds_Coverage_20201015_Part1.rds")
-saveRDS(df.MC2, file = "./replication_supplement/data/sim_Bounds_Coverage_20201015_Part2.rds")
+saveRDS(df.MC1, file = here("replication_supplement/data/sim_Bounds_Coverage_20201015_Part1.rds"))
+saveRDS(df.MC2, file = here("replication_supplement/data/sim_Bounds_Coverage_20201015_Part2.rds"))
 # df.MC <- readRDS(file = "./replication_supplement/data/sim_Bounds_Coverage_20201015.rds")
 
+}
 
 
 ###########################################################################################
 ###########################################################################################
 ### Coverage Plot for the paper
 
-df.MC1 <- readRDS(file = "./replication_supplement/data/sim_Bounds_Coverage_20201015_Part1.rds")
-df.MC2 <- readRDS(file = "./replication_supplement/data/sim_Bounds_Coverage_20201015_Part2.rds")
-df.MC <- dplyr::bind_rows(df.MC1, df.MC2)
-
-# Take values with highest counter only
-plot.df <- df.MC %>% dplyr::filter(!(x.region %in% c(0,1)))  %>%
+plot.df <-
+  # Reading in df.MC
+  dplyr::bind_rows(
+    readRDS(file = here("replication_supplement/data/sim_Bounds_Coverage_20201015_Part1.rds")),
+    readRDS(file = here("replication_supplement/data/sim_Bounds_Coverage_20201015_Part2.rds"))
+  ) %>%
+  # Take values with highest counter only
+  dplyr::filter(!(x.region %in% c(0,1)))  %>%
   group_by(n, k, CEP.true, dist.x, bounds.plot, Bounds.Method) %>%
   summarize(Value=mean(RelDiag_in_Bounds), counter=n()) %>%
   dplyr::filter(counter >= 100) %>% ungroup() %>%
@@ -140,8 +148,8 @@ p.individual <- ggplot(plot.df.precip, aes(x=n, y=Value)) + theme_bw() +
   scale_x_continuous(trans='log2') +
   ylab("Empirical Coverage") +
   xlab("Sample Size")
-p.individual
-ggsave(paste0("./replication_supplement/plots/sim_CoverageDefault_PrecipData.pdf"), p.individual, height=14, width=14,units="in")
+print(p.individual)
+ggsave(here("replication_supplement/plots/sim_CoverageDefault_PrecipData.pdf"), p.individual, height=14, width=14,units="in")
 
 
 
@@ -172,8 +180,8 @@ p.individual <- ggplot(plot.df.flares, aes(x=n, y=Value)) + theme_bw() +
   scale_x_continuous(trans='log2') +
   ylab("Empirical Coverage") +
   xlab("Sample Size")
-p.individual
-ggsave(paste0("./replication_supplement/plots/sim_CoverageDefault_SolarFlaresData.pdf"), p.individual, height=14, width=14,units="in")
+print(p.individual)
+ggsave(here("replication_supplement/plots/sim_CoverageDefault_SolarFlaresData.pdf"), p.individual, height=14, width=14,units="in")
 
 
 
@@ -203,8 +211,8 @@ p.individual <- ggplot(plot.df.recid, aes(x=n, y=Value)) + theme_bw() +
   scale_x_continuous(trans='log2') +
   ylab("Empirical Coverage") +
   xlab("Sample Size")
-p.individual
-ggsave(paste0("./replication_supplement/plots/sim_CoverageDefault_Recidivism.pdf"), p.individual, height=14, width=14,units="in")
+print(p.individual)
+ggsave(here("replication_supplement/plots/sim_CoverageDefault_Recidivism.pdf"), p.individual, height=14, width=14,units="in")
 
 
 ### SPF
@@ -232,6 +240,6 @@ p.individual <- ggplot(plot.df.SPF, aes(x=n, y=Value)) + theme_bw() +
   scale_x_continuous(trans='log2') +
   ylab("Empirical Coverage") +
   xlab("Sample Size")
-p.individual
-ggsave(paste0("./replication_supplement/plots/sim_CoverageDefault_SPF.pdf"), p.individual, height=14, width=14,units="in")
+print(p.individual)
+ggsave(here("replication_supplement/plots/sim_CoverageDefault_SPF.pdf"), p.individual, height=14, width=14,units="in")
 

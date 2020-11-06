@@ -7,6 +7,7 @@ library(dplyr)
 library(doParallel)
 library(RColorBrewer)
 library(reshape2)
+library(here)
 
 
 # devtools::install_github("https://github.com/aijordan/reliabilitydiag")
@@ -14,13 +15,13 @@ library(reshape2)
 library(reliabilitydiag)
 
 # Load classic binning and counting reliability diagram function
-source("replication_supplement/rel_diag_classic.R")
+source(here("replication_supplement/rel_diag_classic.R"))
 
 # Load data sets
-load("data/spf.gdp.long.rda")
-load("data/SF.FC.C1.rda")
-load("data/SF.FC.M1.rda")
-load("data/recid.rda")
+load(here("data/spf.gdp.long.rda"))
+load(here("data/SF.FC.C1.rda"))
+load(here("data/SF.FC.M1.rda"))
+load(here("data/recid.rda"))
 
 
 # Precip Forecasts
@@ -72,13 +73,13 @@ out.list <- lapply(1:max(FC.tbl$FC.id), function(FC.id.index){
   # Beta CDF Fit
   out.cdf <- optim(c(1,1), beta_func, lower=c(.01,.01), upper=c(200,200), method="L-BFGS-B", df=CEP.est)
 
-  p.rel <- plot(rel.fit) + ggtitle(paste0((FC.tbl%>%dplyr::filter(FC.id==FC.id.index)%>%dplyr::pull(FC.name.print))[1])) +
+  p.rel <- autoplot(rel.fit) + ggtitle(paste0((FC.tbl%>%dplyr::filter(FC.id==FC.id.index)%>%dplyr::pull(FC.name.print))[1])) +
     annotate("text", x = 0.125, y = 0.94, label = paste("MCB = ", formatC(as.numeric(summary(rel.fit)[3]), digits=3, format="f"))) +
     annotate("text", x = 0.125, y = 0.88, label = paste("DSC = ", formatC(as.numeric(summary(rel.fit)[4]), digits=3, format="f"))) +
     annotate("text", x = 0.125, y = 0.82, label = paste("UNC = ", formatC(as.numeric(summary(rel.fit)[5]), digits=3, format="f")))
 
   seq.x <- seq(0.001,0.999,length.out=500)
-  p <- plot(rel.fit) +
+  p <- autoplot(rel.fit) +
     geom_line(aes(x=seq.x, y=pbeta(seq.x, out.cdf$par[1], out.cdf$par[2])), color="blue") +
     geom_line(aes(x=seq.x, y=0.2*dbeta(seq.x, out.pdf$par[1], out.pdf$par[2])/max(dbeta(seq.x, out.pdf$par[1], out.pdf$par[2]))), color="purple") +
     ggtitle(paste((FC.tbl %>% dplyr::filter(FC.id==FC.id.index) %>% dplyr::pull(FC.type))[1]))
@@ -100,8 +101,8 @@ colnames(dist.par.hlp) <- c("FC.shape1", "FC.shape2", "CEP.shape1", "CEP.shape2"
 dist.par.tbl <- as_tibble(dist.par.hlp)
 dist.par.tbl$FC.type <- FC.type
 
-saveRDS(FC.tbl, file = "./replication_supplement/data/DGPs_FCtbl.rds")
-saveRDS(dist.par.tbl, file = "./replication_supplement/data/DGPs_DataDriven.rds")
+saveRDS(FC.tbl, file = here("replication_supplement/data/DGPs_FCtbl.rds"))
+saveRDS(dist.par.tbl, file = here("replication_supplement/data/DGPs_DataDriven.rds"))
 
 
 ## Save data-set wise rel diags in
@@ -113,17 +114,17 @@ names(p.rel.list) <- c("EPC", "EMOS", "Logistic", "ENS",
 
 # Precip
 p.precip <- gridExtra::grid.arrange(grobs=p.rel.list[c("ENS", "EMOS", "EPC", "Logistic")], nrow=1)
-ggsave("./replication_supplement/plots/Precip.pdf", p.precip, height=4, width=16, units="in")
+ggsave(here("replication_supplement/plots/Precip.pdf"), p.precip, height=4, width=16, units="in")
 
 # Solar Flares
 p.flares <- gridExtra::grid.arrange(grobs=p.rel.list[c("C1 Flares: NOAA", "C1 Flares: DAFFS", "M1 Flares: NOAA", "M1 Flares: DAFFS")], nrow=1)
-ggsave("./replication_supplement/plots/SolarFlares.pdf", p.flares, height=4, width=16, units="in")
+ggsave(here("replication_supplement/plots/SolarFlares.pdf"), p.flares, height=4, width=16, units="in")
 
 # Recidivism
 p.recid <- gridExtra::grid.arrange(grobs=p.rel.list[c("COMPAS", "MTurk", "Logit", "GBM")], nrow=1)
-ggsave("./replication_supplement/plots/Recidivism.pdf", p.recid, height=4, width=16, units="in")
+ggsave(here("replication_supplement/plots/Recidivism.pdf"), p.recid, height=4, width=16, units="in")
 
 # SPF
 p.SPF <- gridExtra::grid.arrange(grobs=p.rel.list[c("SPF #84: Nowcast", "SPF #84: 1Q Ahead", "SPF #84: 4Q Ahead",
-                                                    "SPF Avg: Nowcast", "SPF Avg: 1Q Ahead", "SPF Avg: 4Q Ahead")], nrow=2)
-ggsave("./replication_supplement/plots/SPF.pdf", p.SPF, height=8, width=12, units="in")
+                                                    "SPF Avg: Nowcast", "SPF Avg: 1Q Ahead", "SPF Avg: 4Q Ahead")], nrow = 2)
+ggsave(here("replication_supplement/plots/SPF.pdf"), p.SPF, height=8, width=12, units="in")
