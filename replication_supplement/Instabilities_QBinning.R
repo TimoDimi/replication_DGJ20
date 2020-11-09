@@ -70,7 +70,7 @@ for (FC.type.choice in unique(FC.tbl$FC.type)){
 
   rel <- reliabilitydiag::reliabilitydiag(x, y=y)
   rel.list <- list.append(rel.list, plot(rel) + ggtitle(paste0("CORP Method")) +
-                            annotate("text", x = 0.125, y = 0.94, label = paste("MCB = ", formatC(as.numeric(summary(rel)[3]), digits=3, format="f"))) +
+                            annotate("text", x = 0.125, y = 0.94, label = paste("MCB = ", formatC(as.numeric(summary(rel)[3]), digits=3, format="f")), color="red") +
                             annotate("text", x = 0.125, y = 0.88, label = paste("DSC = ", formatC(as.numeric(summary(rel)[4]), digits=3, format="f"))) +
                             annotate("text", x = 0.125, y = 0.82, label = paste("UNC = ", formatC(as.numeric(summary(rel)[5]), digits=3, format="f"))))
 

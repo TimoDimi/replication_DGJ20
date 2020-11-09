@@ -73,7 +73,7 @@ out.list <- lapply(1:max(FC.tbl$FC.id), function(FC.id.index){
   out.cdf <- optim(c(1,1), beta_func, lower=c(.01,.01), upper=c(200,200), method="L-BFGS-B", df=CEP.est)
 
   p.rel <- plot(rel.fit) + ggtitle(paste0((FC.tbl%>%dplyr::filter(FC.id==FC.id.index)%>%dplyr::pull(FC.name.print))[1])) +
-    annotate("text", x = 0.125, y = 0.94, label = paste("MCB = ", formatC(as.numeric(summary(rel.fit)[3]), digits=3, format="f"))) +
+    annotate("text", x = 0.125, y = 0.94, label = paste("MCB = ", formatC(as.numeric(summary(rel.fit)[3]), digits=3, format="f")), color="red") +
     annotate("text", x = 0.125, y = 0.88, label = paste("DSC = ", formatC(as.numeric(summary(rel.fit)[4]), digits=3, format="f"))) +
     annotate("text", x = 0.125, y = 0.82, label = paste("UNC = ", formatC(as.numeric(summary(rel.fit)[5]), digits=3, format="f")))
 
