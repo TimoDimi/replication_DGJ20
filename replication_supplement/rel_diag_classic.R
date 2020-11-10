@@ -73,7 +73,7 @@ rel.diag.classic <- function(rlz, FC, bins=FALSE, point.x="avg") {
       scale_shape_manual(values=c(19))
   }
 
-  print(p.reldiag)
+  #print(p.reldiag)
   return(list(df=df, df.bins=df.bins, p=p.reldiag))
 }
 

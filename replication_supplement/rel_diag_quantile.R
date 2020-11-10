@@ -42,7 +42,7 @@ rel.diag.quantile <- function(FC, rlz, binning.method="Q1", m.bins=10, point.x="
       geom_point(data=df.bins, mapping=aes(x=bin.midpoint, y=bin.freq), size=3, colour="red", show.legend = F)
   }
 
-  print(p.reldiag)
+  #print(p.reldiag)
   return(list(df=df, df.bins=df.bins, p=p.reldiag))
 }
 

@@ -4,6 +4,9 @@ library(tibble)
 library(ggplot2)
 library(reliabilitydiag)
 
+runSimulations <- FALSE
+if (isTRUE(runSimulations)) {
+
 M.MC <- 1000
 n.set <- 2^seq(6,13)
 k.set <- c(10, 20 ,50, Inf)
@@ -147,11 +150,12 @@ end.time <- Sys.time()
 (run.time <- end.time-start.time)
 head(df.MC)
 
-saveRDS(df.MC, file = "./replication_paper/data/sim_Bounds_Coverage_MainArticle_20201015.rds")
+saveRDS(df.MC, file = here("replication_paper/data/sim_Bounds_Coverage_MainArticle_20201015.rds"))
 
+}
 
 # Figure 4: Coverage
-df.MC <- readRDS(file = "./replication_paper/data/sim_Bounds_Coverage_MainArticle_20201015.rds")
+df.MC <- readRDS(file = here("replication_paper/data/sim_Bounds_Coverage_MainArticle_20201015.rds"))
 
 plot.df <- df.MC %>%
   dplyr::filter(alpha==1 & !(x.region %in% c(0,1)))  %>%
@@ -193,10 +197,10 @@ p.individual <- ggplot(plot.df, aes(x=n, y=Value)) +
   ylab("Empirical Coverage") +
   xlab("Sample Size")
 
-p.individual
+print(p.individual)
 
 ggsave(
-  paste0("./replication_paper/plots/Fig4_Coverage.pdf"),
+  here("replication_paper/plots/Fig4_Coverage.pdf"),
   p.individual,
   height=8, width=14,units="in")
 

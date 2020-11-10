@@ -18,21 +18,24 @@ df <- tibble(enum = letters[1:4],
       annotate(
         "text",
         x = .125,
-        y = .855,
-        label = sprintf("UNC = %.3f", summary(r)$uncertainty)
+        y = .94,
+        label = sprintf("MCB = .%03d",
+                        round(summary(r)$miscalibration * 1000))
       ) +
       annotate(
         "text",
         x = .125,
-        y = .905,
-        label = sprintf("DSC = %.3f", summary(r)$discrimination),
+        y = .88,
+        label = sprintf("DSC = .%03d",
+                        round(summary(r)$discrimination * 1000)),
         col = "red"
       ) +
       annotate(
         "text",
         x = .125,
-        y = .955,
-        label = sprintf("MCB = %.3f", summary(r)$miscalibration)
+        y = .82,
+        label = sprintf("UNC = .%03d",
+                        round(summary(r)$uncertainty * 1000))
       )
 
     ggMarginal(
@@ -45,14 +48,14 @@ df <- tibble(enum = letters[1:4],
     )
   }))
 
-gridExtra::grid.arrange(grobs = df$p)
+gridExtra::grid.arrange(grobs = df$p, nrow = 1)
 
 purrr::pmap(df, function(enum, forecast, p) {
   ggsave(
     here(sprintf("replication_supplement/plots/marginals_%s.pdf", forecast)),
     p,
-    width = 6,
-    height = 6,
+    width = 5,
+    height = 5,
     units = "in"
   )
 })

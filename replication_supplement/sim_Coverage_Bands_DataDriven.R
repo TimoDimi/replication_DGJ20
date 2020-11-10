@@ -149,7 +149,7 @@ p.individual <- ggplot(plot.df.precip, aes(x=n, y=Value)) + theme_bw() +
   ylab("Empirical Coverage") +
   xlab("Sample Size")
 print(p.individual)
-ggsave(here("replication_supplement/plots/sim_CoverageDefault_PrecipData.pdf"), p.individual, height=14, width=14,units="in")
+ggsave(here("replication_supplement/plots/sim_CoverageDefault_PrecipData.pdf"), p.individual, height=15, width=15,units="in")
 
 
 
@@ -181,7 +181,7 @@ p.individual <- ggplot(plot.df.flares, aes(x=n, y=Value)) + theme_bw() +
   ylab("Empirical Coverage") +
   xlab("Sample Size")
 print(p.individual)
-ggsave(here("replication_supplement/plots/sim_CoverageDefault_SolarFlaresData.pdf"), p.individual, height=14, width=14,units="in")
+ggsave(here("replication_supplement/plots/sim_CoverageDefault_SolarFlaresData.pdf"), p.individual, height=15, width=15,units="in")
 
 
 
@@ -212,7 +212,7 @@ p.individual <- ggplot(plot.df.recid, aes(x=n, y=Value)) + theme_bw() +
   ylab("Empirical Coverage") +
   xlab("Sample Size")
 print(p.individual)
-ggsave(here("replication_supplement/plots/sim_CoverageDefault_Recidivism.pdf"), p.individual, height=14, width=14,units="in")
+ggsave(here("replication_supplement/plots/sim_CoverageDefault_Recidivism.pdf"), p.individual, height=15, width=15,units="in")
 
 
 ### SPF
@@ -241,5 +241,5 @@ p.individual <- ggplot(plot.df.SPF, aes(x=n, y=Value)) + theme_bw() +
   ylab("Empirical Coverage") +
   xlab("Sample Size")
 print(p.individual)
-ggsave(here("replication_supplement/plots/sim_CoverageDefault_SPF.pdf"), p.individual, height=14, width=14,units="in")
+ggsave(here("replication_supplement/plots/sim_CoverageDefault_SPF.pdf"), p.individual, height=15, width=15,units="in")
 

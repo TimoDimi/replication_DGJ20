@@ -185,7 +185,7 @@ p.eff <- ggplot(plot.df.precip, aes(x=n, y=Value)) +
   ylab("MSE") +
   xlab("Sample Size n")
 print(p.eff)
-ggsave(here("replication_supplement/plots/Efficiency_PrecipData.pdf"), p.eff, height=15, width=12, units="in")
+ggsave(here("replication_supplement/plots/Efficiency_PrecipData.pdf"), p.eff, height=15, width=15, units="in")
 
 
 
@@ -211,7 +211,7 @@ p.eff <- ggplot(plot.df.flares, aes(x=n, y=Value)) +
   ylab("MSE") +
   xlab("Sample Size n")
 print(p.eff)
-ggsave(here("replication_supplement/plots/Efficiency_SolarFlaresData.pdf"), p.eff, height=15, width=12, units="in")
+ggsave(here("replication_supplement/plots/Efficiency_SolarFlaresData.pdf"), p.eff, height=15, width=15, units="in")
 
 
 
@@ -237,7 +237,7 @@ p.eff <- ggplot(plot.df.recid, aes(x=n, y=Value)) +
   ylab("MSE") +
   xlab("Sample Size n")
 print(p.eff)
-ggsave(here("replication_supplement/plots/Efficiency_RecidivismData.pdf"), p.eff, height=15, width=12, units="in")
+ggsave(here("replication_supplement/plots/Efficiency_RecidivismData.pdf"), p.eff, height=15, width=15, units="in")
 
 
 

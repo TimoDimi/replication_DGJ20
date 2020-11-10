@@ -5,7 +5,10 @@ library(ggplot2)
 library(reliabilitydiag)
 library(RColorBrewer)
 
-source("replication_supplement/rel_diag_classic.R")
+source(here("replication_supplement/rel_diag_classic.R"))
+
+runSimulations <- FALSE
+if (isTRUE(runSimulations)) {
 
 M <- 1000
 n.set <- 2^seq(6,13)
@@ -180,11 +183,12 @@ stopCluster(cl)
 end.time <- Sys.time()
 (run.time <- end.time-start.time)
 
-saveRDS(res.df.MC, file = "./replication_paper/data/sim_Rel_Efficiency_MainArticle_20201015.rds")
+saveRDS(res.df.MC, file = here("replication_paper/data/sim_Rel_Efficiency_MainArticle_20201015.rds"))
 
+}
 
 # Figure 5: Efficiency
-res.df.MC <- readRDS(file = "./replication_paper/data/sim_Rel_Efficiency_MainArticle_20201015.rds")
+res.df.MC <- readRDS(file = here("replication_paper/data/sim_Rel_Efficiency_MainArticle_20201015.rds"))
 
 res.df <- res.df.MC %>%
   group_by(Measure, RelDiag.Type, n, m.bins, alpha, dist.x, k) %>%
@@ -253,7 +257,7 @@ p.eff <- ggplot(df.plot, aes(x=n, y=Value)) +
   ylab("MSE") +
   xlab("Sample Size n")
 
-p.eff
+print(p.eff)
 
-ggsave("./replication_paper/plots/Fig5_Efficiency.pdf", p.eff, height=8, width=14, units="in")
+ggsave(here("replication_paper/plots/Fig5_Efficiency.pdf"), p.eff, height=8, width=14, units="in")
 

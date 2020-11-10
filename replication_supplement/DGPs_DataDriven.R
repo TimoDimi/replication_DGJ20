@@ -73,10 +73,30 @@ out.list <- lapply(1:max(FC.tbl$FC.id), function(FC.id.index){
   # Beta CDF Fit
   out.cdf <- optim(c(1,1), beta_func, lower=c(.01,.01), upper=c(200,200), method="L-BFGS-B", df=CEP.est)
 
-  p.rel <- autoplot(rel.fit) + ggtitle(paste0((FC.tbl%>%dplyr::filter(FC.id==FC.id.index)%>%dplyr::pull(FC.name.print))[1])) +
-    annotate("text", x = 0.125, y = 0.94, label = paste("MCB = ", formatC(as.numeric(summary(rel.fit)[3]), digits=3, format="f")), color="red") +
-    annotate("text", x = 0.125, y = 0.88, label = paste("DSC = ", formatC(as.numeric(summary(rel.fit)[4]), digits=3, format="f"))) +
-    annotate("text", x = 0.125, y = 0.82, label = paste("UNC = ", formatC(as.numeric(summary(rel.fit)[5]), digits=3, format="f")))
+  p.rel <- autoplot(rel.fit) +
+    ggtitle(paste0((FC.tbl%>%dplyr::filter(FC.id==FC.id.index)%>%dplyr::pull(FC.name.print))[1])) +
+    annotate(
+      "text",
+      x = .125,
+      y = .94,
+      label = sprintf("MCB = .%03d",
+                      round(summary(rel.fit)$miscalibration * 1000)),
+      color = "red"
+    ) +
+    annotate(
+      "text",
+      x = .125,
+      y = .88,
+      label = sprintf("DSC = .%03d",
+                      round(summary(rel.fit)$discrimination * 1000))
+    ) +
+    annotate(
+      "text",
+      x = .125,
+      y = .82,
+      label = sprintf("UNC = .%03d",
+                      round(summary(rel.fit)$uncertainty * 1000))
+    )
 
   seq.x <- seq(0.001,0.999,length.out=500)
   p <- autoplot(rel.fit) +
@@ -114,17 +134,17 @@ names(p.rel.list) <- c("EPC", "EMOS", "Logistic", "ENS",
 
 # Precip
 p.precip <- gridExtra::grid.arrange(grobs=p.rel.list[c("ENS", "EMOS", "EPC", "Logistic")], nrow=1)
-ggsave(here("replication_supplement/plots/Precip.pdf"), p.precip, height=4, width=16, units="in")
+ggsave(here("replication_supplement/plots/Precip.pdf"), p.precip, height=5, width=20, units="in")
 
 # Solar Flares
 p.flares <- gridExtra::grid.arrange(grobs=p.rel.list[c("C1 Flares: NOAA", "C1 Flares: DAFFS", "M1 Flares: NOAA", "M1 Flares: DAFFS")], nrow=1)
-ggsave(here("replication_supplement/plots/SolarFlares.pdf"), p.flares, height=4, width=16, units="in")
+ggsave(here("replication_supplement/plots/SolarFlares.pdf"), p.flares, height=5, width=20, units="in")
 
 # Recidivism
 p.recid <- gridExtra::grid.arrange(grobs=p.rel.list[c("COMPAS", "MTurk", "Logit", "GBM")], nrow=1)
-ggsave(here("replication_supplement/plots/Recidivism.pdf"), p.recid, height=4, width=16, units="in")
+ggsave(here("replication_supplement/plots/Recidivism.pdf"), p.recid, height=5, width=20, units="in")
 
 # SPF
 p.SPF <- gridExtra::grid.arrange(grobs=p.rel.list[c("SPF #84: Nowcast", "SPF #84: 1Q Ahead", "SPF #84: 4Q Ahead",
                                                     "SPF Avg: Nowcast", "SPF Avg: 1Q Ahead", "SPF Avg: 4Q Ahead")], nrow = 2)
-ggsave(here("replication_supplement/plots/SPF.pdf"), p.SPF, height=8, width=12, units="in")
+ggsave(here("replication_supplement/plots/SPF.pdf"), p.SPF, height=10, width=15, units="in")
