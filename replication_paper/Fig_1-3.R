@@ -29,7 +29,7 @@ Fig1 <- tibble(
              r <- reliabilitydiag(precip[[forecast]], y = precip$obs, n.boot = 100)
              autoplot(r) +
                ggtitle(sprintf("(%s) %s / CORP", enum, forecast)) +
-               annotate("text", x = .125, y = .94, label = sprintf("MCB = %.3f", summary(r)$miscalibration)) +
+               annotate("text", x = .125, y = .94, label = sprintf("MCB = %.3f", summary(r)$miscalibration), color="red") +
                annotate("text", x = .125, y = .88, label = sprintf("DSC = %.3f", summary(r)$discrimination)) +
                annotate("text", x = .125, y = .82, label = sprintf("UNC = %.3f", summary(r)$uncertainty))
            }})
@@ -68,7 +68,7 @@ Fig2 <- tibble(
              r <- reliabilitydiag(precip[["EMOS"]], y = precip$obs, n.boot = 100)
              autoplot(r) +
                ggtitle(sprintf("(%s) EMOS / CORP", enum)) +
-               annotate("text", x = .125, y = .94, label = sprintf("MCB = %.3f", summary(r)$miscalibration)) +
+               annotate("text", x = .125, y = .94, label = sprintf("MCB = %.3f", summary(r)$miscalibration), color="red") +
                annotate("text", x = .125, y = .88, label = sprintf("DSC = %.3f", summary(r)$discrimination)) +
                annotate("text", x = .125, y = .82, label = sprintf("UNC = %.3f", summary(r)$uncertainty))
            }})
@@ -108,7 +108,7 @@ Fig3 <- tibble(
            r <- reliabilitydiag(x, y = y, region.position = region.position)
            autoplot(r) +
              ggtitle(sprintf("(%s)", enum)) +
-             annotate("text", x = .125, y = .94, label = sprintf("MCB = %.3f", summary(r)$miscalibration)) +
+             annotate("text", x = .125, y = .94, label = sprintf("MCB = %.3f", summary(r)$miscalibration), color="red") +
              annotate("text", x = .125, y = .88, label = sprintf("DSC = %.3f", summary(r)$discrimination)) +
              annotate("text", x = .125, y = .82, label = sprintf("UNC = %.3f", summary(r)$uncertainty))
          })
