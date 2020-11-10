@@ -1,6 +1,6 @@
 Replication material and R code for "Evaluating probabilistic classifiers: Reliability diagrams and score decompositions revisited" ([arXiv:2008.03033](https://arxiv.org/abs/2008.03033))
 ================
-Timo Dimitriadis, Alexander I. Jordan
+Timo Dimitriadis, Tilmann Gneiting, Alexander I. Jordan
 
 ## Contents:
 
