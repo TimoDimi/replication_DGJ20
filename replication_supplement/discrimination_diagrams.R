@@ -1,9 +1,10 @@
+library(here)
 library(reliabilitydiag)
 library(dplyr)
 library(ggplot2)
 library(ggExtra)
 library(gridExtra)
-library(here)
+library(purrr)
 
 data("precip_Niamey_2016")
 

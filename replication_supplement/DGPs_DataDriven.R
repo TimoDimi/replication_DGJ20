@@ -1,18 +1,9 @@
-
-library(rlist)
-library(tibble)
+library(here)
+library(reliabilitydiag)
+library(dplyr)
 library(EnvStats)
 library(ggplot2)
-library(dplyr)
-library(doParallel)
 library(RColorBrewer)
-library(reshape2)
-library(here)
-
-
-# devtools::install_github("https://github.com/aijordan/reliabilitydiag")
-# devtools::install_local("reliabilitydiag_0.1.0.tar.gz")
-library(reliabilitydiag)
 
 # Load classic binning and counting reliability diagram function
 source(here("replication_supplement/rel_diag_classic.R"))

@@ -18,44 +18,29 @@ devtools::install_local(here("reliabilitydiag_0.1.0.tar.gz"))
 library(reliabilitydiag)
 ```
 
-*Should we be providing frozen versions of all the packages that are used?*
-
 ### Required packages and compilation environment
 
 ```{r message = FALSE}
 library(here)
+library(reliabilitydiag)
+library(doParallel)
+library(dplyr)
 library(rlist)
-library(tibble)
+library(purrr)
 library(EnvStats)
 library(ggplot2)
-library(dplyr)
-library(doParallel)
 library(RColorBrewer)
-library(reshape2)
-library(devtools)
 library(ggExtra)
 library(gridExtra)
 
 sessionInfo()
-
 ```
 
 
 ## Section S1: Experimental data sets
 
-### Required CRAN packages
-
-- rlist
-- tibble
-- EnvStats
-- ggplot2
-- dplyr
-- doParallel
-- RColorBrewer
-- reshape2
-- here
-
 ### Plots for Fig S1
+
 ```{r DGPs_DataDriven, message=FALSE, warning=FALSE, fig.width = 20, fig.height = 5, fig.keep = 1:3}
 source("DGPs_DataDriven.R", local = knitr::knit_global())
 ```
@@ -67,12 +52,6 @@ gridExtra::grid.arrange(p.SPF)
 
 ## Section S2: (In)stability: Illustrative examples
 
-### Required CRAN packages
-
-- gridExtra
-- reliabilitydiag
-- here
-
 ### Plots for Fig S2--S5
 
 ```{r Instabilities_QBinning, message = FALSE, fig.width = 20, fig.height = 20}
@@ -82,61 +61,47 @@ source("Instabilities_QBinning.R", local = knitr::knit_global())
 
 ## Section S4: Uncertainty quantification: Data driven simulations
 
-### Required CRAN packages
+### Coverage simulations
 
-- doParallel
-- dplyr
-- tibble
-- ggplot2
-- reliabilitydiag
-- here
+The following source file performs an extensive simulation of the coverage
+for the uncertainty quantification options: consistency, confidence.
+
+**Note:** Multiple hours of runtime. Only run if necessary to confirm reproducibility.
+
+```{r sim_coverage, eval = FALSE}
+source("sim_Coverage_Bands_DataDriven.R", local = knitr::knit_global())
+```
+
 
 ### Plots for Fig S6--S9
 
-The simulations are only rerun when the `runSimulations` variable in
-`"sim_Coverage_Bands_DataDriven.R"` is `TRUE`.
-
-```{r sim_Coverage_Bands_DataDriven, message = FALSE, fig.width = 15, fig.height = 15}
-source("sim_Coverage_Bands_DataDriven.R", local = knitr::knit_global())
+```{r fig_coverage, message = FALSE, fig.width = 15, fig.height = 15}
+source("fig_coverage.R", local = knitr::knit_global())
 ```
 
 
 ## Section S5: Statistical efficiency of CORP: Data driven simulations
 
-### Required CRAN packages
+### Efficiency simulations
 
-- rlist
-- tibble
-- devtools
-- EnvStats
-- ggplot2
-- dplyr
-- doParallel
-- RColorBrewer
-- reshape2
-- reliabilitydiag
-- here
+The following source file performs an extensive simulation of the CORP efficiency
+in comparison to various binning and counting approaches.
 
+**Note:** Multiple hours of runtime. Only run if necessary to confirm reproducibility.
 
-### Plots for Fig S10--S13
-
-The simulations are only rerun when the `runSimulations` variable in
-`"sim_Efficiency_DataDriven.R"` is `TRUE`.
-
-```{r sim_Efficiency_DataDriven, message = FALSE, fig.width = 15, fig.height = 15}
+```{r sim_efficiency, eval = FALSE}
 source("sim_Efficiency_DataDriven.R", local = knitr::knit_global())
 ```
 
 
+### Plots for Fig S10--S13
+
+```{r fig_efficiency, message = FALSE, fig.width = 15, fig.height = 15}
+source("fig_efficiency.R", local = knitr::knit_global())
+```
+
+
 ## Section S6: CORP discrimination diagrams
-
-### Required CRAN packages
-
-- reliabilitydiag
-- dplyr
-- ggplot2
-- ggExtra
-- here
 
 ### Plots for Fig S14
 
