@@ -22,23 +22,14 @@ library(reliabilitydiag)
 
 ```{r message = FALSE}
 library(here)
-library(dplyr)
-library(tidyr)
 library(reliabilitydiag)
-library(RColorBrewer)
-library(ggplot2)
-
-library(rlist)
-library(tibble)
-library(EnvStats)
-library(ggplot2)
 library(dplyr)
 library(doParallel)
+library(ggplot2)
 library(RColorBrewer)
-library(reshape2)
-library(devtools)
-library(ggExtra)
+library(purrr)
 library(gridExtra)
+library(ggExtra)
 
 sessionInfo()
 
@@ -47,92 +38,67 @@ sessionInfo()
 
 ## Section "Reliability diagrams: Binning and Counting"
 
-### Required CRAN packages
-
-- here
-- reliabilitydiag
-- dplyr
-- purrr
-- ggplot2
-- gridExtra
-
 ### Plots for Fig 1
 
 ```{r Fig1, message=FALSE, warning=FALSE, fig.width = 10, fig.height = 15}
-source("Fig1.R", local = knitr::knit_global())
+source("Fig1_miscalibration.R", local = knitr::knit_global())
 ```
 
 ### Plots for Fig 2
 
 ```{r Fig2, message=FALSE, warning=FALSE, fig.width = 10, fig.height = 10}
-source("Fig2.R", local = knitr::knit_global())
+source("Fig2_instability.R", local = knitr::knit_global())
 ```
 
 
 ## Section "Uncertainty quantification"
 
-### Required CRAN packages
-
-- here
-- reliabilitydiag
-- dplyr
-- purrr
-- ggplot2
-- gridExtra
-- doParallel
-
 ### Plots for Fig 3
 
 ```{r Fig3, message=FALSE, warning=FALSE, fig.width = 10, fig.height = 10}
-source("Fig3.R", local = knitr::knit_global())
+source("Fig3_uncertainty_quantification.R", local = knitr::knit_global())
+```
+
+### Simulations for Fig 4
+
+The following source file performs an extensive simulation of the coverage
+for the uncertainty quantification options: consistency, confidence.
+
+**Note:** Multiple hours of runtime. Only run if necessary to confirm reproducibility.
+
+```{r sim_coverage, eval = FALSE}
+source("sim_Coverage_Bands_MainArticle.R", local = knitr::knit_global())
 ```
 
 ### Plots for Fig 4
 
-The simulations are only rerun when the `runSimulations` variable in
-`"sim_Coverage_Bands_MainArticle.R"` is `TRUE`.
-
 ```{r Fig4, message=FALSE, warning=FALSE, fig.width = 14, fig.height = 8}
-source("sim_Coverage_Bands_MainArticle.R", local = knitr::knit_global())
+source("Fig4_coverage.R", local = knitr::knit_global())
 ```
 
 ## Section "Discussion"
 
-### Required CRAN packages
-
-- here
-- reliabilitydiag
-- dplyr
-- purrr
-- ggplot2
-- gridExtra
-- ggExtra
-
 ### Plots for Fig 5
 
 ```{r Fig5, message=FALSE, warning=FALSE, fig.width = 10, fig.height = 5}
-source("Fig5.R", local = knitr::knit_global())
+source("Fig5_discrimination.R", local = knitr::knit_global())
 ```
 
 ## Appendix B "Statistical Efficiency of CORP"
 
-### Required CRAN packages
+### Simulations for Fig 6
 
-- doParallel
-- dplyr
-- tibble
-- ggplot2
-- reliabilitydiag
-- RColorBrewer
+The following source file performs an extensive simulation of the CORP efficiency
+in comparison to various binning and counting approaches.
 
+**Note:** Multiple hours of runtime. Only run if necessary to confirm reproducibility.
 
-### Plots for Fig 6
-
-The simulations are only rerun when the `runSimulations` variable in
-`"sim_Efficiency_MainArticle.R"` is `TRUE`.
-
-```{r Fig6, message=FALSE, warning=FALSE, fig.width = 14, fig.height = 8}
+```{r sim_efficiency, eval = FALSE}
 source("sim_Efficiency_MainArticle.R", local = knitr::knit_global())
 ```
 
+### Plots for Fig 6
 
+```{r Fig6, message=FALSE, warning=FALSE, fig.width = 14, fig.height = 8}
+source("Fig6_efficiency.R", local = knitr::knit_global())
+```
