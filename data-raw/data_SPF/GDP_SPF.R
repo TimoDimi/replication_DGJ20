@@ -7,8 +7,8 @@ library(reshape2)
 # Load and merge the SPF forecasts for GDP recess ---------------------------------------------------------------------------------------------
 
 # Data sources:
-# https://www.philadelphiafed.org/research-and-data/real-time-center/survey-of-professional-forecasters/data-files/recess
-# https://www.philadelphiafed.org/research-and-data/real-time-center/real-time-data/data-files/routput
+# https://www.philadelphiafed.org/surveys-and-data/recess
+# https://www.philadelphiafed.org/surveys-and-data/real-time-data-research/routput
 
 # No licence terms found on the Philadelphia FED homepage
 
