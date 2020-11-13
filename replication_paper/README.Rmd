@@ -13,9 +13,9 @@ Install the `reliabilitydiag` package located in the root directory.
 The `here` package identifies that directory by the location of the replication_DGJ20.Rproj file.
 
 ```{r eval = FALSE}
-library(here)
-devtools::install_local(here("reliabilitydiag_0.1.0.tar.gz"))
-library(reliabilitydiag)
+install.packages("here")
+install.packages("devtools")
+devtools::install_local(here::here("reliabilitydiag_0.1.1.tar.gz"))
 ```
 
 ### Required packages and compilation environment

@@ -8,9 +8,9 @@ Install the `reliabilitydiag` package located in the root directory. The
 replication\_DGJ20.Rproj file.
 
 ``` r
-library(here)
-devtools::install_local(here("reliabilitydiag_0.1.0.tar.gz"))
-library(reliabilitydiag)
+install.packages("here")
+install.packages("devtools")
+devtools::install_local(here::here("reliabilitydiag_0.1.1.tar.gz"))
 ```
 
 ### Required packages and compilation environment
@@ -48,19 +48,19 @@ sessionInfo()
     ##  [1] ggExtra_0.9           gridExtra_2.3         purrr_0.3.4          
     ##  [4] RColorBrewer_1.1-2    ggplot2_3.3.2         doParallel_1.0.16    
     ##  [7] iterators_1.0.13      foreach_1.5.1         dplyr_1.0.2          
-    ## [10] reliabilitydiag_0.1.0 here_0.1             
+    ## [10] reliabilitydiag_0.1.1 here_0.1             
     ## 
     ## loaded via a namespace (and not attached):
-    ##  [1] Rcpp_1.0.5       compiler_4.0.3   pillar_1.4.6     later_1.1.0.1   
+    ##  [1] Rcpp_1.0.5       later_1.1.0.1    pillar_1.4.6     compiler_4.0.3  
     ##  [5] tools_4.0.3      digest_0.6.27    evaluate_0.14    lifecycle_0.2.0 
     ##  [9] tibble_3.0.4     gtable_0.3.0     pkgconfig_2.0.3  rlang_0.4.8     
     ## [13] shiny_1.5.0      yaml_2.2.1       xfun_0.18        fastmap_1.0.1   
     ## [17] withr_2.3.0      stringr_1.4.0    knitr_1.30       generics_0.1.0  
-    ## [21] vctrs_0.3.4      tidyselect_1.1.0 rprojroot_1.3-2  grid_4.0.3      
+    ## [21] vctrs_0.3.4      rprojroot_1.3-2  grid_4.0.3       tidyselect_1.1.0
     ## [25] glue_1.4.2       R6_2.5.0         rmarkdown_2.5    magrittr_1.5    
-    ## [29] codetools_0.2-16 backports_1.1.10 scales_1.1.1     promises_1.1.1  
-    ## [33] htmltools_0.5.0  ellipsis_0.3.1   mime_0.9         xtable_1.8-4    
-    ## [37] colorspace_1.4-1 httpuv_1.5.4     stringi_1.5.3    miniUI_0.1.1.1  
+    ## [29] promises_1.1.1   backports_1.2.0  scales_1.1.1     codetools_0.2-16
+    ## [33] ellipsis_0.3.1   htmltools_0.5.0  xtable_1.8-4     mime_0.9        
+    ## [37] colorspace_1.4-1 httpuv_1.5.4     miniUI_0.1.1.1   stringi_1.5.3   
     ## [41] munsell_0.5.0    crayon_1.3.4
 
 ## Section “Reliability diagrams: Binning and Counting”
@@ -95,10 +95,10 @@ source("Fig3_uncertainty_quantification.R", local = knitr::knit_global())
 
 The following source file performs an extensive simulation of the
 coverage for the uncertainty quantification options: consistency,
-confidence
+confidence.
 
-**Note:** Multiple hours of runtime. Only evaluate if necessary to
-confirm reproducibility.
+**Note:** Multiple hours of runtime. Only run if necessary to confirm
+reproducibility.
 
 ``` r
 source("sim_Coverage_Bands_MainArticle.R", local = knitr::knit_global())
@@ -129,8 +129,8 @@ source("Fig5_discrimination.R", local = knitr::knit_global())
 The following source file performs an extensive simulation of the CORP
 efficiency in comparison to various binning and counting approaches.
 
-**Note:** Multiple hours of runtime. Only evaluate if necessary to
-confirm reproducibility.
+**Note:** Multiple hours of runtime. Only run if necessary to confirm
+reproducibility.
 
 ``` r
 source("sim_Efficiency_MainArticle.R", local = knitr::knit_global())

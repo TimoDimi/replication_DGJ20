@@ -8,9 +8,9 @@ Install the `reliabilitydiag` package located in the root directory. The
 replication\_DGJ20.Rproj file.
 
 ``` r
-library(here)
-devtools::install_local(here("reliabilitydiag_0.1.0.tar.gz"))
-library(reliabilitydiag)
+install.packages("here")
+install.packages("devtools")
+devtools::install_local(here::here("reliabilitydiag_0.1.1.tar.gz"))
 ```
 
 ### Required packages and compilation environment
@@ -50,21 +50,21 @@ sessionInfo()
     ##  [1] gridExtra_2.3         ggExtra_0.9           RColorBrewer_1.1-2   
     ##  [4] ggplot2_3.3.2         EnvStats_2.4.0        purrr_0.3.4          
     ##  [7] rlist_0.4.6.1         dplyr_1.0.2           doParallel_1.0.16    
-    ## [10] iterators_1.0.13      foreach_1.5.1         reliabilitydiag_0.1.0
+    ## [10] iterators_1.0.13      foreach_1.5.1         reliabilitydiag_0.1.1
     ## [13] here_0.1             
     ## 
     ## loaded via a namespace (and not attached):
-    ##  [1] tidyselect_1.1.0  xfun_0.18         colorspace_1.4-1  vctrs_0.3.4      
-    ##  [5] generics_0.1.0    miniUI_0.1.1.1    htmltools_0.5.0   yaml_2.2.1       
-    ##  [9] rlang_0.4.8       later_1.1.0.1     pillar_1.4.6      glue_1.4.2       
-    ## [13] withr_2.3.0       lifecycle_0.2.0   stringr_1.4.0     munsell_0.5.0    
-    ## [17] gtable_0.3.0      codetools_0.2-16  evaluate_0.14     knitr_1.30       
-    ## [21] fastmap_1.0.1     httpuv_1.5.4      Rcpp_1.0.5        xtable_1.8-4     
-    ## [25] promises_1.1.1    scales_1.1.1      backports_1.1.10  mime_0.9         
-    ## [29] digest_0.6.27     stringi_1.5.3     shiny_1.5.0       grid_4.0.3       
-    ## [33] rprojroot_1.3-2   tools_4.0.3       magrittr_1.5      tibble_3.0.4     
-    ## [37] crayon_1.3.4      pkgconfig_2.0.3   ellipsis_0.3.1    data.table_1.13.2
-    ## [41] rmarkdown_2.5     R6_2.5.0          compiler_4.0.3
+    ##  [1] Rcpp_1.0.5        later_1.1.0.1     pillar_1.4.6      compiler_4.0.3   
+    ##  [5] tools_4.0.3       digest_0.6.27     evaluate_0.14     lifecycle_0.2.0  
+    ##  [9] tibble_3.0.4      gtable_0.3.0      pkgconfig_2.0.3   rlang_0.4.8      
+    ## [13] shiny_1.5.0       yaml_2.2.1        xfun_0.18         fastmap_1.0.1    
+    ## [17] withr_2.3.0       stringr_1.4.0     knitr_1.30        generics_0.1.0   
+    ## [21] vctrs_0.3.4       rprojroot_1.3-2   grid_4.0.3        tidyselect_1.1.0 
+    ## [25] data.table_1.13.2 glue_1.4.2        R6_2.5.0          rmarkdown_2.5    
+    ## [29] magrittr_1.5      promises_1.1.1    backports_1.2.0   scales_1.1.1     
+    ## [33] codetools_0.2-16  ellipsis_0.3.1    htmltools_0.5.0   xtable_1.8-4     
+    ## [37] mime_0.9          colorspace_1.4-1  httpuv_1.5.4      miniUI_0.1.1.1   
+    ## [41] stringi_1.5.3     munsell_0.5.0     crayon_1.3.4
 
 ## Section S1: Experimental data sets
 
@@ -142,7 +142,13 @@ source("fig_efficiency.R", local = knitr::knit_global())
 ### Plots for Fig S14
 
 ``` r
-source("discrimination_diagrams.R", local = knitr::knit_global())
+source("DGPs_DataDriven_DSC.R", local = knitr::knit_global())
 ```
 
-![](README_files/figure-gfm/discrimination_diagrams-1.png)<!-- -->
+![](README_files/figure-gfm/DGPs_DataDriven_DSC-1.png)<!-- -->![](README_files/figure-gfm/DGPs_DataDriven_DSC-2.png)<!-- -->![](README_files/figure-gfm/DGPs_DataDriven_DSC-3.png)<!-- -->
+
+``` r
+gridExtra::grid.arrange(p.SPF)
+```
+
+![](README_files/figure-gfm/DGPs_DataDriven2_DSC-1.png)<!-- -->
