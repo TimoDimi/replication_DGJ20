@@ -1,0 +1,104 @@
+---
+title: "Plots in Main Article"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Install packages
+
+Install the `reliabilitydiag` package located in the root directory.
+The `here` package identifies that directory by the location of the replication_DGJ20.Rproj file.
+
+```{r eval = FALSE}
+install.packages("here")
+install.packages("devtools")
+devtools::install_local(here::here("reliabilitydiag_0.1.1.tar.gz"))
+```
+
+### Required packages and compilation environment
+
+```{r message = FALSE}
+library(here)
+library(reliabilitydiag)
+library(dplyr)
+library(doParallel)
+library(ggplot2)
+library(RColorBrewer)
+library(purrr)
+library(gridExtra)
+library(ggExtra)
+
+sessionInfo()
+
+```
+
+
+## Section "Reliability diagrams: Binning and Counting"
+
+### Plots for Fig 1
+
+```{r Fig1, message=FALSE, warning=FALSE, fig.width = 10, fig.height = 15}
+source("Fig1_miscalibration.R", local = knitr::knit_global())
+```
+
+### Plots for Fig 2
+
+```{r Fig2, message=FALSE, warning=FALSE, fig.width = 10, fig.height = 10}
+source("Fig2_instability.R", local = knitr::knit_global())
+```
+
+
+## Section "Uncertainty quantification"
+
+### Plots for Fig 3
+
+```{r Fig3, message=FALSE, warning=FALSE, fig.width = 10, fig.height = 10}
+source("Fig3_uncertainty_quantification.R", local = knitr::knit_global())
+```
+
+### Simulations for Fig 4
+
+The following source file performs an extensive simulation of the coverage
+for the uncertainty quantification options: consistency, confidence.
+
+**Note:** Multiple hours of runtime. Only run if necessary to confirm reproducibility.
+
+```{r sim_coverage, eval = FALSE}
+source("sim_Coverage_Bands_MainArticle.R", local = knitr::knit_global())
+```
+
+### Plots for Fig 4
+
+```{r Fig4, message=FALSE, warning=FALSE, fig.width = 14, fig.height = 8}
+source("Fig4_coverage.R", local = knitr::knit_global())
+```
+
+## Section "Discussion"
+
+### Plots for Fig 5
+
+```{r Fig5, message=FALSE, warning=FALSE, fig.width = 10, fig.height = 5}
+source("Fig5_discrimination.R", local = knitr::knit_global())
+```
+
+## Appendix B "Statistical Efficiency of CORP"
+
+### Simulations for Fig 6
+
+The following source file performs an extensive simulation of the CORP efficiency
+in comparison to various binning and counting approaches.
+
+**Note:** Multiple hours of runtime. Only run if necessary to confirm reproducibility.
+
+```{r sim_efficiency, eval = FALSE}
+source("sim_Efficiency_MainArticle.R", local = knitr::knit_global())
+```
+
+### Plots for Fig 6
+
+```{r Fig6, message=FALSE, warning=FALSE, fig.width = 14, fig.height = 8}
+source("Fig6_efficiency.R", local = knitr::knit_global())
+```

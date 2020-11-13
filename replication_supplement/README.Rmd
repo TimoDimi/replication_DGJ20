@@ -1,0 +1,115 @@
+---
+title: "Plots in Supplementary Material"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Install packages
+
+Install the `reliabilitydiag` package located in the root directory.
+The `here` package identifies that directory by the location of the replication_DGJ20.Rproj file.
+
+```{r eval = FALSE}
+install.packages("here")
+install.packages("devtools")
+devtools::install_local(here::here("reliabilitydiag_0.1.1.tar.gz"))
+```
+
+### Required packages and compilation environment
+
+```{r message = FALSE}
+library(here)
+library(reliabilitydiag)
+library(doParallel)
+library(dplyr)
+library(rlist)
+library(purrr)
+library(EnvStats)
+library(ggplot2)
+library(RColorBrewer)
+library(ggExtra)
+library(gridExtra)
+
+sessionInfo()
+```
+
+
+## Section S1: Experimental data sets
+
+### Plots for Fig S1
+
+```{r DGPs_DataDriven, message=FALSE, warning=FALSE, fig.width = 20, fig.height = 5, fig.keep = 1:3}
+source("DGPs_DataDriven.R", local = knitr::knit_global())
+```
+
+```{r DGPs_DataDriven2, fig.width = 15, fig.height = 10}
+gridExtra::grid.arrange(p.SPF)
+```
+
+
+## Section S2: (In)stability: Illustrative examples
+
+### Plots for Fig S2--S5
+
+```{r Instabilities_QBinning, message = FALSE, fig.width = 20, fig.height = 20}
+source("Instabilities_QBinning.R", local = knitr::knit_global())
+```
+
+
+## Section S4: Uncertainty quantification: Data driven simulations
+
+### Coverage simulations
+
+The following source file performs an extensive simulation of the coverage
+for the uncertainty quantification options: consistency, confidence.
+
+**Note:** Multiple hours of runtime. Only run if necessary to confirm reproducibility.
+
+```{r sim_coverage, eval = FALSE}
+source("sim_Coverage_Bands_DataDriven.R", local = knitr::knit_global())
+```
+
+
+### Plots for Fig S6--S9
+
+```{r fig_coverage, message = FALSE, fig.width = 15, fig.height = 15}
+source("fig_coverage.R", local = knitr::knit_global())
+```
+
+
+## Section S5: Statistical efficiency of CORP: Data driven simulations
+
+### Efficiency simulations
+
+The following source file performs an extensive simulation of the CORP efficiency
+in comparison to various binning and counting approaches.
+
+**Note:** Multiple hours of runtime. Only run if necessary to confirm reproducibility.
+
+```{r sim_efficiency, eval = FALSE}
+source("sim_Efficiency_DataDriven.R", local = knitr::knit_global())
+```
+
+
+### Plots for Fig S10--S13
+
+```{r fig_efficiency, message = FALSE, fig.width = 15, fig.height = 15}
+source("fig_efficiency.R", local = knitr::knit_global())
+```
+
+
+## Section S6: CORP discrimination diagrams
+
+### Plots for Fig S14
+
+```{r DGPs_DataDriven_DSC, message = FALSE, warning = FALSE, fig.width = 20, fig.height = 5, fig.keep = 1:3}
+source("DGPs_DataDriven_DSC.R", local = knitr::knit_global())
+```
+
+```{r DGPs_DataDriven2_DSC, fig.width = 15, fig.height = 10}
+gridExtra::grid.arrange(p.SPF)
+```
+
