@@ -7,8 +7,8 @@ Timo Dimitriadis, Tilmann Gneiting, Alexander I. Jordan
 - Version 0.1.1 of the R package 'reliabilitydiag' in the root directory
 - Replication material and code for the article in the directory "replication_paper"
 - Replication material and code for the supplement in the directory "replication_supplement"
-- Directory "data-raw" contains raw data of the Survey of Professional Forecasters (SPF; [forecasts](https://www.philadelphiafed.org/surveys-and-data/recess) and [observations](https://www.philadelphiafed.org/surveys-and-data/real-time-data-research/routput)), on solar flares ([doi:10.7910/DVN/HYP74O](https://doi.org/10.7910/DVN/HYP74O)), and recidivism of defendants in Broward County, Florida ([doi:10.7910/DVN/KT20FE](https://doi.org/10.7910/DVN/KT20FE)). It further contains R files that transforms the raw data into the format used for analysis.
-- Directory "data" contains the transformed raw data in .rda format.
+- Directory "data-raw" contains raw data on daily precipitation at Niamey, of the Survey of Professional Forecasters (SPF; [forecasts](https://www.philadelphiafed.org/surveys-and-data/recess) and [observations](https://www.philadelphiafed.org/surveys-and-data/real-time-data-research/routput)), on solar flares ([doi:10.7910/DVN/HYP74O](https://doi.org/10.7910/DVN/HYP74O)), and recidivism of defendants in Broward County, Florida ([doi:10.7910/DVN/KT20FE](https://doi.org/10.7910/DVN/KT20FE)). It further contains R files that transforms the raw data into the format used for analysis.
+- Directory "data" contains the transformed raw data in .csv and .rda format.
 
 ## References
 
