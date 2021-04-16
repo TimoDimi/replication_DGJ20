@@ -1,4 +1,4 @@
-Replication material and R code for "Evaluating probabilistic classifiers: Reliability diagrams and score decompositions revisited" ([arXiv:2008.03033](https://arxiv.org/abs/2008.03033))
+Replication package for "Stable reliability diagrams for probabilistic classifiers" ([doi:10.1073/pnas.2016191118](https://doi.org/10.1073/pnas.2016191118))
 ================
 Timo Dimitriadis, Tilmann Gneiting, Alexander I. Jordan
 

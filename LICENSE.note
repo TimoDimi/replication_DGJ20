@@ -1,0 +1,9 @@
+The content of this replication package as a whole is distributed under GPL-3 (GNU GENERAL PUBLIC LICENSE version 3).
+
+This package contains open source products:
+
+- data sets in the folder "data-raw/data_SPF/" from the Federal Reserve Bank Philadelphia (https://www.philadelphiafed.org/)
+- data sets in the folder "data-raw/data_SolarFlares/" available at https://doi.org/10.7910/DVN/HYP74O, licensed under CC0
+- data sets in the folder "data-raw/data_recid/" available at https://doi.org/10.7910/DVN/KT20FE, licensed under CC0
+- modified historic products from the European Center for Medium-Range Weather Forecasts (https://www.ecmwf.int/)
+- software package 'reliabilitydiag' (version 0.1.1), licensed under GPL-3
